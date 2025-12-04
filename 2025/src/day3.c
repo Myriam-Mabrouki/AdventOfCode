@@ -39,40 +39,38 @@ long part2 (FILE *f) {
 
     int N = 12;
     int max[N];
-    char buff[512], tmp[512];
-    long long sum;
-    //while (fgets(buff,sizeof(buff),f))
+    char buff[512], tmp[N];
+    long long sum = 0;
+
     while (fscanf(f,"%s", buff) == 1)
     {
         for (int i = 0; i < N; i++)
-        {
             max[i] = i;
-        }
         
         int size = strlen(buff);
         for (int i = 1; i < size; i++)
         {   
             for (int j = 0; j < N; j++)
             {
-                if (size - i >= N - j && i > j && (j == 0 || max[j-1]-i >= j))
+                if (size - i >= N - j && i > j && (j == 0 || i - max[j-1] > 0))
                 {
-                    printf("i : %d, j : %d - %c > %c ?, size = %d\n", i, j, buff[i], buff[max[j]], size);
                     if (buff[i] > buff[max[j]])
                     {
-                        printf("oui\n");
                         for (int k = 0; k < N - j; k++)
-                        {
-                            printf("haha k+j=%d, i+k=%d k=%d, j=%d, i=%d\n", k+j, i+k, k, j , i);
                             max[j+k] = i + k;
-                        }
+
                         break;
                     }
                 }
             }
             
         }
-        sprintf(tmp, "%d%d%d%d%d%d%d%d%d%d%d%d", buff[max[0]] - '0', buff[max[1]] - '0', buff[max[2]] - '0', buff[max[3]] - '0', buff[max[4]] - '0', buff[max[5]] - '0', buff[max[6]] - '0', buff[max[7]] - '0', buff[max[8]] - '0', buff[max[9]] - '0', buff[max[10]] - '0', buff[max[11]] - '0');
-        printf("%s\n", tmp);
+
+        for (int i = 0; i < N; i++)
+            tmp[i] = buff[max[i]];
+
+        tmp[N] = '\0';
+
         sum += atoll(tmp);
     }
 
